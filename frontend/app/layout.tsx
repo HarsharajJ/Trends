@@ -4,6 +4,7 @@ import { Inter, Oswald, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { SiteNavbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
+import { CartProvider } from "@/context/cart-context"
 import "./globals.css"
 
 const _inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
@@ -23,11 +24,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans antialiased ${_inter.variable} ${_oswald.variable}`}>
-        <SiteNavbar />
-        <main className="min-h-screen bg-background">
-          {children}
-        </main>
-        <Footer />
+        <CartProvider>
+          <SiteNavbar />
+          <main className="min-h-screen bg-background">
+            {children}
+          </main>
+          <Footer />
+        </CartProvider>
         <Analytics />
       </body>
     </html>
