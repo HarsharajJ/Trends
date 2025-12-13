@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useParams, notFound } from "next/navigation"
+import { useParams, useRouter, notFound } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
@@ -11,13 +11,16 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getJerseyById, getJerseysByCategory } from "@/lib/data"
 import { JerseyCard } from "@/components/jersey-card"
+import { useCart } from "@/context/cart-context"
 
 export default function JerseyPage() {
     const params = useParams()
+    const router = useRouter()
     const id = params.id
     const jersey = getJerseyById(id as string)
     const [quantity, setQuantity] = useState(1)
     const [activeTab, setActiveTab] = useState("description")
+    const { addItem } = useCart()
 
     if (!jersey) {
         notFound()
@@ -33,6 +36,20 @@ export default function JerseyPage() {
         } else if (type === "increment") {
             setQuantity(quantity + 1)
         }
+    }
+
+    const handleAddToCart = () => {
+        for (let i = 0; i < quantity; i++) {
+            addItem({
+                id: jersey.id,
+                name: jersey.name,
+                player: jersey.player,
+                price: jersey.price,
+                image: jersey.image,
+            })
+        }
+        // Reset quantity after adding
+        setQuantity(1)
     }
 
     return (
@@ -143,7 +160,11 @@ export default function JerseyPage() {
                                 </Button>
                             </div>
 
-                            <Button size="lg" className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
+                            <Button
+                                size="lg"
+                                className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground gap-2"
+                                onClick={handleAddToCart}
+                            >
                                 <ShoppingBag className="h-5 w-5" />
                                 Add to Cart
                             </Button>

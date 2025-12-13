@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Heart, ShoppingBag, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { useCart } from "@/context/cart-context"
 
 interface JerseyCardProps {
     id: number
@@ -34,6 +35,20 @@ export function JerseyCard({
     badgeColor,
     index = 0,
 }: JerseyCardProps) {
+    const { addItem } = useCart()
+
+    const handleQuickAdd = (e: React.MouseEvent) => {
+        e.preventDefault()
+        e.stopPropagation()
+        addItem({
+            id,
+            name,
+            player,
+            price,
+            image,
+        })
+    }
+
     return (
         <motion.div
             layout
@@ -71,7 +86,10 @@ export function JerseyCard({
 
                 {/* Quick Add */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 pointer-events-none">
-                    <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg pointer-events-auto">
+                    <Button
+                        onClick={handleQuickAdd}
+                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg pointer-events-auto cursor-pointer"
+                    >
                         <ShoppingBag className="h-4 w-4 mr-2" />
                         Quick Add
                     </Button>

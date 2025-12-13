@@ -16,7 +16,13 @@ export default function CategoriesPage() {
                         transition={{ duration: 0.6 }}
                         className="font-[var(--font-oswald)] text-5xl sm:text-6xl lg:text-7xl font-bold text-foreground tracking-tight"
                     >
-                        ALL CATEGORIES
+                        <span className="px-5">
+                        ALL
+                        </span>
+                        <span className="font-[var(--font-oswald)] text-5xl sm:text-6xl lg:text-7xl  font-bold tracking-tight text-primary">
+                         CATEGORIES
+                        </span>
+                         
                     </motion.h1>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}

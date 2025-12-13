@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ShoppingBag, Search, User } from "lucide-react"
+import { Search, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Navbar,
@@ -14,6 +14,7 @@ import {
   MobileNavToggle,
   NavbarButton,
 } from "@/components/ui/resizable-navbar"
+import { CartSheet } from "@/components/cart-sheet"
 
 const navLinks = [
   { name: "Categories", link: "/categories" },
@@ -51,12 +52,7 @@ export function SiteNavbar() {
           <Button variant="ghost" size="icon" className="text-foreground">
             <User className="h-5 w-5" />
           </Button>
-          <Button variant="ghost" size="icon" className="text-foreground relative">
-            <ShoppingBag className="h-5 w-5" />
-            <span className="absolute -top-1 -right-1 h-4 w-4 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
-              3
-            </span>
-          </Button>
+          <CartSheet />
           <NavbarButton variant="gradient" className="hidden sm:inline-block">
             Shop Now
           </NavbarButton>
@@ -78,12 +74,7 @@ export function SiteNavbar() {
 
           {/* Right side icons and toggle */}
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="text-foreground relative">
-              <ShoppingBag className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 h-4 w-4 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
-                3
-              </span>
-            </Button>
+            <CartSheet />
             <MobileNavToggle
               isOpen={isMobileMenuOpen}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
