@@ -140,21 +140,23 @@ export default function JerseyPage() {
                         </p>
 
                         {/* Actions */}
-                        <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                            <div className="flex items-center border border-border rounded-md">
+                        <div className="flex flex-row flex-wrap gap-3 sm:gap-4 mb-8">
+                            <div className="flex items-center border border-border rounded-md shrink-0">
                                 <Button
                                     variant="ghost"
                                     size="icon"
                                     onClick={() => handleQuantityChange("decrement")}
                                     disabled={quantity <= 1}
+                                    className="h-10 w-10 sm:h-10 sm:w-10"
                                 >
                                     <Minus className="h-4 w-4" />
                                 </Button>
-                                <span className="w-12 text-center font-medium">{quantity}</span>
+                                <span className="w-8 sm:w-12 text-center font-medium">{quantity}</span>
                                 <Button
                                     variant="ghost"
                                     size="icon"
                                     onClick={() => handleQuantityChange("increment")}
+                                    className="h-10 w-10 sm:h-10 sm:w-10"
                                 >
                                     <Plus className="h-4 w-4" />
                                 </Button>
@@ -162,14 +164,15 @@ export default function JerseyPage() {
 
                             <Button
                                 size="lg"
-                                className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground gap-2"
+                                className="flex-1 min-w-[140px] bg-primary hover:bg-primary/90 text-primary-foreground gap-2 h-11"
                                 onClick={handleAddToCart}
                             >
                                 <ShoppingBag className="h-5 w-5" />
-                                Add to Cart
+                                <span className="hidden xs:inline">Add to Cart</span>
+                                <span className="inline xs:hidden">Add to cart</span>
                             </Button>
 
-                            <Button variant="outline" size="icon" className="h-11 w-11">
+                            <Button variant="outline" size="icon" className="h-11 w-11 shrink-0">
                                 <Heart className="h-5 w-5" />
                             </Button>
                         </div>

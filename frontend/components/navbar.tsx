@@ -96,6 +96,18 @@ export function SiteNavbar() {
               {link.name}
             </a>
           ))}
+          <div className="flex items-center gap-4 py-2 text-foreground">
+            <Button variant="ghost" className="justify-start px-0 hover:bg-transparent w-full">
+              <Search className="h-5 w-5 mr-2" />
+              Search
+            </Button>
+          </div>
+          <div className="flex items-center gap-4 py-2 text-foreground">
+            <Button variant="ghost" className="justify-start px-0 hover:bg-transparent w-full">
+              <User className="h-5 w-5 mr-2" />
+              Account
+            </Button>
+          </div>
           <div className="flex w-full flex-col gap-4 pt-4">
             <NavbarButton
               variant="gradient"
@@ -107,6 +119,6 @@ export function SiteNavbar() {
           </div>
         </MobileNavMenu>
       </MobileNav>
-    </Navbar>
+    </Navbar >
   )
 }
