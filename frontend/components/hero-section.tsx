@@ -52,7 +52,7 @@ export function HeroSection() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-lg text-muted-foreground max-w-md leading-relaxed"
             >
-              Authentic jerseys from the world's top leagues. NBA, NFL, Soccer & more. Rep your favorite players with
+              Authentic jerseys from the world's top leagues.Cricket,Football,Basketball,Volleyball  & more. Rep your team with
               premium quality gear.
             </motion.p>
 

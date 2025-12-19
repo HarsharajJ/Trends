@@ -2,36 +2,36 @@
 
 export const categories = [
     {
-        id: "nba",
-        name: "NBA",
+        id: "cricket",
+        name: "Cricket",
         image: "/nba-basketball-jersey-lakers-yellow-dark-dramatic.png",
         count: "120+ Jerseys",
         color: "from-yellow-500/20",
-        description: "Official NBA basketball jerseys from all 30 teams",
+        description: "Premium cricket jerseys from international teams",
     },
     {
-        id: "nfl",
-        name: "NFL",
+        id: "football",
+        name: "Football",
         image: "/nfl-football-jersey-patriots-blue-dark-dramatic.png",
         count: "95+ Jerseys",
         color: "from-blue-500/20",
-        description: "Premium NFL football jerseys for every fan",
+        description: "Top football jerseys from elite clubs worldwide",
     },
     {
-        id: "soccer",
-        name: "Soccer",
+        id: "basketball",
+        name: "Basketball",
         image: "/soccer-football-jersey-barcelona-red-blue-dark-dra.png",
         count: "150+ Jerseys",
         color: "from-red-500/20",
-        description: "World-class soccer jerseys from top leagues",
+        description: "Official basketball jerseys for every fan",
     },
     {
-        id: "mlb",
-        name: "MLB",
+        id: "volleyball",
+        name: "Volleyball",
         image: "/mlb-baseball-jersey-yankees-pinstripe-dark-dramati.png",
         count: "80+ Jerseys",
         color: "from-slate-500/20",
-        description: "Classic MLB baseball jerseys and apparel",
+        description: "Professional volleyball jerseys and apparel",
     },
 ]
 

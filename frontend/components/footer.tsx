@@ -5,12 +5,12 @@ import { Instagram, Twitter, Youtube, Facebook } from "lucide-react"
 
 const footerLinks = {
   shop: [
-    { name: "NBA Jerseys", href: "#" },
-    { name: "NFL Jerseys", href: "#" },
-    { name: "Soccer Jerseys", href: "#" },
-    { name: "MLB Jerseys", href: "#" },
-    { name: "New Arrivals", href: "#" },
-    { name: "Sale", href: "#" },
+    { name: "Cricket Jerseys", href: "/categories/cricket" },
+    { name: "Football Jerseys", href: "/categories/football" },
+    { name: "Basketball Jerseys", href: "/categories/basketball" },
+    { name: "Volleyball Jerseys", href: "/categories/volleyball" },
+    { name: "New Arrivals", href: "/categories" },
+    { name: "Sale", href: "/categories" },
   ],
   support: [
     { name: "Contact Us", href: "#" },

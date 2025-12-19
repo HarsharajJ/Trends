@@ -51,3 +51,5 @@ secrets.json
 discord_storage.json
 *.secret
 *.token
+
+/src/generated/prisma
