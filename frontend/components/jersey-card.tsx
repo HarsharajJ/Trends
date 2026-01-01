@@ -109,10 +109,10 @@ export function JerseyCard({
                     </h3>
                     <p className="text-sm text-muted-foreground">{player}</p>
                     <div className="flex items-center gap-2">
-                        <span className="text-lg font-bold text-foreground">${price}</span>
+                        <span className="text-lg font-bold text-foreground">₹{price}</span>
                         {originalPrice && (
                             <span className="text-sm text-muted-foreground line-through">
-                                ${originalPrice}
+                                ₹{originalPrice}
                             </span>
                         )}
                     </div>

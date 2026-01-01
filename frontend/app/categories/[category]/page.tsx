@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useParams } from "next/navigation"
 import { motion } from "framer-motion"
 import Image from "next/image"
@@ -8,21 +8,80 @@ import Link from "next/link"
 import { Filter, Grid3X3, LayoutGrid, ArrowLeft, ArrowUpRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { JerseyCard } from "@/components/jersey-card"
-import { categories, getJerseysByCategory, getCategoryById } from "@/lib/data"
+import { getCategories, getJerseys } from "@/lib/api"
+import { Category, Jersey } from "@/lib/types"
 import { notFound } from "next/navigation"
+
+// Fallback colors for categories
+const categoryColors: Record<string, string> = {
+    cricket: "from-yellow-500/20",
+    football: "from-blue-500/20",
+    basketball: "from-red-500/20",
+    volleyball: "from-slate-500/20",
+}
 
 export default function CategoryPage() {
     const params = useParams()
     const categoryId = params.category as string
     const [gridSize, setGridSize] = useState<"small" | "large">("large")
 
-    const category = getCategoryById(categoryId)
-    const jerseys = getJerseysByCategory(categoryId)
+    const [category, setCategory] = useState<Category | null>(null)
+    const [categories, setCategories] = useState<Category[]>([])
+    const [jerseys, setJerseys] = useState<Jersey[]>([])
+    const [loading, setLoading] = useState(true)
+    const [notFoundState, setNotFoundState] = useState(false)
 
-    // If category doesn't exist, show 404
-    if (!category) {
+    useEffect(() => {
+        async function loadData() {
+            try {
+                const [categoriesData, jerseysData] = await Promise.all([
+                    getCategories(),
+                    getJerseys({ categoryId, limit: 50 }),
+                ])
+
+                const currentCategory = categoriesData.find((c) => c.id === categoryId)
+                if (!currentCategory) {
+                    setNotFoundState(true)
+                    return
+                }
+
+                setCategories(categoriesData)
+                setCategory(currentCategory)
+                setJerseys(jerseysData.data)
+            } catch (error) {
+                console.error("Failed to load category data:", error)
+                setNotFoundState(true)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        loadData()
+    }, [categoryId])
+
+    if (notFoundState) {
         notFound()
     }
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-background pt-32 pb-16 px-4">
+                <div className="max-w-7xl mx-auto">
+                    <div className="animate-pulse space-y-8">
+                        <div className="h-16 bg-secondary/50 rounded-lg w-1/2" />
+                        <div className="h-6 bg-secondary/50 rounded w-1/3" />
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                            {Array.from({ length: 8 }).map((_, i) => (
+                                <div key={i} className="aspect-[3/4] bg-secondary/50 rounded-2xl" />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    if (!category) return null
 
     return (
         <>
@@ -52,7 +111,7 @@ export default function CategoryPage() {
                                 transition={{ duration: 0.6 }}
                                 className="font-[var(--font-oswald)] text-5xl sm:text-6xl lg:text-7xl font-bold text-foreground tracking-tight"
                             >
-                                {category.name} JERSEYS
+                                {category.name.toUpperCase()} JERSEYS
                             </motion.h1>
                             <motion.p
                                 initial={{ opacity: 0, y: 20 }}
@@ -77,7 +136,7 @@ export default function CategoryPage() {
                                 fill
                                 className="object-cover"
                             />
-                            <div className={`absolute inset-0 bg-gradient-to-t ${category.color} via-transparent to-transparent opacity-60`} />
+                            <div className={`absolute inset-0 bg-gradient-to-t ${categoryColors[category.id] || "from-gray-500/20"} via-transparent to-transparent opacity-60`} />
                         </motion.div>
                     </div>
                 </div>
@@ -93,8 +152,8 @@ export default function CategoryPage() {
                                 key={cat.id}
                                 href={`/categories/${cat.id}`}
                                 className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${cat.id === categoryId
-                                        ? "bg-primary text-primary-foreground"
-                                        : "bg-secondary text-foreground hover:bg-secondary/80"
+                                    ? "bg-primary text-primary-foreground"
+                                    : "bg-secondary text-foreground hover:bg-secondary/80"
                                     }`}
                             >
                                 {cat.name}
@@ -147,12 +206,25 @@ export default function CategoryPage() {
                     <motion.div
                         layout
                         className={`grid gap-4 sm:gap-6 ${gridSize === "large"
-                                ? "grid-cols-2 lg:grid-cols-4"
-                                : "grid-cols-3 lg:grid-cols-6"
+                            ? "grid-cols-2 lg:grid-cols-4"
+                            : "grid-cols-3 lg:grid-cols-6"
                             }`}
                     >
                         {jerseys.map((jersey, index) => (
-                            <JerseyCard key={jersey.id} {...jersey} index={index} />
+                            <JerseyCard
+                                key={jersey.id}
+                                id={jersey.id}
+                                name={jersey.name}
+                                player={jersey.player}
+                                price={Number(jersey.price)}
+                                originalPrice={jersey.originalPrice ? Number(jersey.originalPrice) : null}
+                                rating={jersey.rating}
+                                reviews={jersey.reviewCount}
+                                image={jersey.image}
+                                badge={jersey.badge}
+                                badgeColor={jersey.badgeColor}
+                                index={index}
+                            />
                         ))}
                     </motion.div>
 
@@ -191,3 +263,4 @@ export default function CategoryPage() {
         </>
     )
 }
+

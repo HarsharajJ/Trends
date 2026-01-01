@@ -1,19 +1,29 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { JerseyCard } from "@/components/jersey-card"
-import { allJerseys } from "@/lib/data"
+import { getJerseys } from "@/lib/api"
+import { Jersey } from "@/lib/types"
 
 export function TrendingJerseys() {
+  const [jerseys, setJerseys] = useState<Jersey[]>([])
+  const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(0)
   const itemsPerPage = 4
-  const totalPages = Math.ceil(allJerseys.length / itemsPerPage)
+  const totalPages = Math.ceil(jerseys.length / itemsPerPage)
 
-  const displayedJerseys = allJerseys.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
+  useEffect(() => {
+    getJerseys({ limit: 20 })
+      .then((response) => setJerseys(response.data))
+      .catch(console.error)
+      .finally(() => setLoading(false))
+  }, [])
+
+  const displayedJerseys = jerseys.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
 
   return (
     <section className="py-24 px-4 sm:px-6 lg:px-8 bg-card">
@@ -37,7 +47,7 @@ export function TrendingJerseys() {
               variant="outline"
               size="icon"
               onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
-              disabled={currentPage === 0}
+              disabled={currentPage === 0 || loading}
               className="border-border text-foreground"
             >
               <ChevronLeft className="h-5 w-5" />
@@ -46,7 +56,7 @@ export function TrendingJerseys() {
               variant="outline"
               size="icon"
               onClick={() => setCurrentPage(Math.min(totalPages - 1, currentPage + 1))}
-              disabled={currentPage === totalPages - 1}
+              disabled={currentPage === totalPages - 1 || loading}
               className="border-border text-foreground"
             >
               <ChevronRight className="h-5 w-5" />
@@ -56,11 +66,31 @@ export function TrendingJerseys() {
 
         {/* Products Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          <AnimatePresence mode="popLayout">
-            {displayedJerseys.map((jersey, index) => (
-              <JerseyCard key={jersey.id} {...jersey} index={index} />
-            ))}
-          </AnimatePresence>
+          {loading ? (
+            // Loading skeleton
+            Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="aspect-[3/4] bg-secondary/50 rounded-2xl animate-pulse" />
+            ))
+          ) : (
+            <AnimatePresence mode="popLayout">
+              {displayedJerseys.map((jersey, index) => (
+                <JerseyCard
+                  key={jersey.id}
+                  id={jersey.id}
+                  name={jersey.name}
+                  player={jersey.player}
+                  price={Number(jersey.price)}
+                  originalPrice={jersey.originalPrice ? Number(jersey.originalPrice) : null}
+                  rating={jersey.rating}
+                  reviews={jersey.reviewCount}
+                  image={jersey.image}
+                  badge={jersey.badge}
+                  badgeColor={jersey.badgeColor}
+                  index={index}
+                />
+              ))}
+            </AnimatePresence>
+          )}
         </div>
 
         {/* View All Button */}
@@ -85,3 +115,4 @@ export function TrendingJerseys() {
     </section>
   )
 }
+

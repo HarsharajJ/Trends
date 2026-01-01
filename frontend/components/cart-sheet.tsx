@@ -19,7 +19,7 @@ import { Separator } from "@/components/ui/separator"
 export function CartSheet() {
     const [open, setOpen] = useState(false)
     const router = useRouter()
-    const { items, totalItems, totalPrice, updateQuantity, removeItem } = useCart()
+    const { items, totalItems, totalPrice, updateQuantity, removeItem, isHydrated } = useCart()
 
     const shipping = items.length > 0 ? 10 : 0
     const tax = totalPrice * 0.08 // 8% tax
@@ -34,7 +34,7 @@ export function CartSheet() {
                 onClick={() => setOpen(true)}
             >
                 <ShoppingBag className="h-5 w-5" />
-                {totalItems > 0 && (
+                {isHydrated && totalItems > 0 && (
                     <span className="absolute -top-1 -right-1 h-4 w-4 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
                         {totalItems}
                     </span>
@@ -128,7 +128,7 @@ export function CartSheet() {
                                             </div>
 
                                             <span className="font-bold text-foreground">
-                                                ${(item.price * item.quantity).toFixed(2)}
+                                                ₹{(item.price * item.quantity).toFixed(2)}
                                             </span>
                                         </div>
                                     </div>
@@ -150,26 +150,20 @@ export function CartSheet() {
                                 <div className="flex justify-between text-sm">
                                     <span className="text-muted-foreground">Subtotal</span>
                                     <span className="text-foreground font-medium">
-                                        ${totalPrice.toFixed(2)}
+                                        ₹{totalPrice.toFixed(2)}
                                     </span>
                                 </div>
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">Shipping</span>
+                                    <span className="text-muted-foreground">GST (18%)</span>
                                     <span className="text-foreground font-medium">
-                                        ${shipping.toFixed(2)}
-                                    </span>
-                                </div>
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">Tax (8%)</span>
-                                    <span className="text-foreground font-medium">
-                                        ${tax.toFixed(2)}
+                                        ₹{(totalPrice * 0.18).toFixed(2)}
                                     </span>
                                 </div>
                                 <Separator className="my-2" />
                                 <div className="flex justify-between">
                                     <span className="font-bold text-lg">Total</span>
                                     <span className="font-bold text-lg text-primary">
-                                        ${finalTotal.toFixed(2)}
+                                        ₹{(totalPrice * 1.18).toFixed(2)}
                                     </span>
                                 </div>
                             </div>

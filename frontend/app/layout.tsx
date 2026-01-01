@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { SiteNavbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { CartProvider } from "@/context/cart-context"
+import { Toaster } from "@/components/ui/toaster"
 import "./globals.css"
 
 const _inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
@@ -12,8 +13,8 @@ const _oswald = Oswald({ subsets: ["latin"], variable: "--font-oswald" })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "JERSEY VAULT | Premium Sports Jerseys",
-  description: "Discover authentic sports jerseys from top leagues worldwide. NBA, NFL, Soccer & more.",
+  title: "NU jerserys | Premium Jersey Designs",
+  description: "Discover premium jersey designs for all sports. Cricket, Football, Basketball, Volleyball & more. Get unique, high-quality jersey designs for your team.",
 }
 
 export default function RootLayout({
@@ -30,6 +31,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <Toaster />
         </CartProvider>
         <Analytics />
       </body>

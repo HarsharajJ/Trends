@@ -5,12 +5,12 @@ import { Instagram, Twitter, Youtube, Facebook } from "lucide-react"
 
 const footerLinks = {
   shop: [
-    { name: "Cricket Jerseys", href: "/categories/cricket" },
-    { name: "Football Jerseys", href: "/categories/football" },
-    { name: "Basketball Jerseys", href: "/categories/basketball" },
-    { name: "Volleyball Jerseys", href: "/categories/volleyball" },
+    { name: "Cricket Designs", href: "/categories/cricket" },
+    { name: "Football Designs", href: "/categories/football" },
+    { name: "Basketball Designs", href: "/categories/basketball" },
+    { name: "Volleyball Designs", href: "/categories/volleyball" },
     { name: "New Arrivals", href: "/categories" },
-    { name: "Sale", href: "/categories" },
+    { name: "Featured", href: "/categories" },
   ],
   support: [
     { name: "Contact Us", href: "#" },
@@ -45,11 +45,11 @@ export function Footer() {
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="inline-block mb-6">
               <span className="font-[var(--font-oswald)] text-2xl font-bold tracking-tight text-foreground">
-                JERSEY<span className="text-primary">VAULT</span>
+                NU<span className="text-primary">PRINTS</span>
               </span>
             </Link>
             <p className="text-sm text-muted-foreground mb-6 max-w-xs">
-              Your ultimate destination for authentic sports jerseys. Wear your passion, rep your team.
+              Your ultimate destination for premium jersey designs. Create your vision, represent your team.
             </p>
             <div className="flex items-center gap-4">
               {socialLinks.map((social) => (
@@ -119,12 +119,12 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground">© 2025 Jersey Vault. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">© 2025 NU jerserys. All rights reserved.</p>
           <div className="flex items-center gap-6">
-            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link href="/privacy-policy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Privacy Policy
             </Link>
-            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link href="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Terms of Service
             </Link>
           </div>

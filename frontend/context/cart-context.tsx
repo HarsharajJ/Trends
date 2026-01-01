@@ -1,6 +1,29 @@
 "use client"
 
-import React, { createContext, useContext, useState, ReactNode } from "react"
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react"
+import { useToast } from "@/components/ui/use-toast"
+
+const CART_STORAGE_KEY = "nujerseys-cart"
+
+// SSR-safe localStorage helpers
+function getStoredCart(): CartItem[] {
+    if (typeof window === "undefined") return []
+    try {
+        const stored = localStorage.getItem(CART_STORAGE_KEY)
+        return stored ? JSON.parse(stored) : []
+    } catch {
+        return []
+    }
+}
+
+function setStoredCart(items: CartItem[]): void {
+    if (typeof window === "undefined") return
+    try {
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items))
+    } catch {
+        // Silently fail if localStorage is full or unavailable
+    }
+}
 
 export interface CartItem {
     id: number
@@ -20,12 +43,31 @@ interface CartContextType {
     clearCart: () => void
     totalItems: number
     totalPrice: number
+    isHydrated: boolean
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
 
 export function CartProvider({ children }: { children: ReactNode }) {
     const [items, setItems] = useState<CartItem[]>([])
+    const [isHydrated, setIsHydrated] = useState(false)
+    const { toast } = useToast()
+
+    // Load cart from localStorage on mount (client-side only)
+    useEffect(() => {
+        const stored = getStoredCart()
+        if (stored.length > 0) {
+            setItems(stored)
+        }
+        setIsHydrated(true)
+    }, [])
+
+    // Persist cart to localStorage whenever items change
+    useEffect(() => {
+        if (isHydrated) {
+            setStoredCart(items)
+        }
+    }, [items, isHydrated])
 
     const addItem = (item: Omit<CartItem, "quantity">) => {
         setItems((prevItems) => {
@@ -36,6 +78,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 )
             }
             return [...prevItems, { ...item, quantity: 1 }]
+        })
+        toast({
+            title: "Added to cart",
+            description: `${item.name} has been added to your cart.`,
         })
     }
 
@@ -75,6 +121,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 clearCart,
                 totalItems,
                 totalPrice,
+                isHydrated,
             }}
         >
             {children}
@@ -89,3 +136,4 @@ export function useCart() {
     }
     return context
 }
+

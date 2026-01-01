@@ -34,10 +34,10 @@ export function SiteNavbar() {
         {/* Logo */}
         <Link href="/" className="relative z-20 flex items-center gap-1">
           <span className="font-[var(--font-oswald)] text-2xl font-bold tracking-tight text-foreground">
-            JERSEY
+            NU
           </span>
           <span className="font-[var(--font-oswald)] text-2xl font-bold tracking-tight text-primary">
-            VAULT
+            PRINTS
           </span>
         </Link>
 
@@ -65,10 +65,10 @@ export function SiteNavbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-1">
             <span className="font-[var(--font-oswald)] text-xl font-bold tracking-tight text-foreground">
-              JERSEY
+              NU
             </span>
             <span className="font-[var(--font-oswald)] text-xl font-bold tracking-tight text-primary">
-              VAULT
+              PRINTS
             </span>
           </Link>
 

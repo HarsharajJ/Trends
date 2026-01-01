@@ -32,7 +32,7 @@ export function HeroSection() {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20"
             >
               <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-              <span className="text-sm font-medium text-primary">2025 Season Collection</span>
+              <span className="text-sm font-medium text-primary">2025 Design Collection</span>
             </motion.div>
 
             <motion.h1
@@ -41,9 +41,9 @@ export function HeroSection() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="font-[var(--font-oswald)] text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-[0.9]"
             >
-              <span className="text-foreground">WEAR YOUR</span>
+              <span className="text-foreground">DESIGN YOUR</span>
               <br />
-              <span className="text-primary">PASSION</span>
+              <span className="text-primary">LEGACY</span>
             </motion.h1>
 
             <motion.p
@@ -52,8 +52,8 @@ export function HeroSection() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-lg text-muted-foreground max-w-md leading-relaxed"
             >
-              Authentic jerseys from the world's top leagues.Cricket,Football,Basketball,Volleyball  & more. Rep your team with
-              premium quality gear.
+              Premium jersey designs for all sports. Cricket, Football, Basketball, Volleyball & more. Create stunning
+              designs for your team.
             </motion.p>
 
             <motion.div
@@ -66,7 +66,7 @@ export function HeroSection() {
                 size="lg"
                 className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 h-14 text-base font-semibold group"
               >
-                Shop Collection
+                Browse Designs
                 <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Button>
               <Button
@@ -87,8 +87,8 @@ export function HeroSection() {
               className="grid grid-cols-3 gap-8 pt-8 border-t border-border"
             >
               {[
-                { value: "50K+", label: "Jerseys Sold" },
-                { value: "200+", label: "Teams Available" },
+                { value: "50K+", label: "Designs Created" },
+                { value: "200+", label: "Teams Served" },
                 { value: "4.9★", label: "Customer Rating" },
               ].map((stat) => (
                 <div key={stat.label}>
@@ -141,7 +141,7 @@ export function HeroSection() {
                 className="absolute bottom-20 -left-4 bg-primary rounded-lg p-4 shadow-xl"
               >
                 <div className="text-xs text-primary-foreground/80 uppercase tracking-wider">Starting at</div>
-                <div className="font-[var(--font-oswald)] text-2xl font-bold text-primary-foreground">$89</div>
+                <div className="font-[var(--font-oswald)] text-2xl font-bold text-primary-foreground">₹89</div>
               </motion.div>
             </div>
           </motion.div>

@@ -4,34 +4,29 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft, CreditCard, Truck, ShieldCheck, X } from "lucide-react"
+import { ArrowLeft, Download, ShieldCheck, FileArchive } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useCart } from "@/context/cart-context"
 import { Separator } from "@/components/ui/separator"
+import { Checkbox } from "@/components/ui/checkbox"
+import { useToast } from "@/components/ui/use-toast"
 
 export default function CheckoutPage() {
     const router = useRouter()
     const { items, totalItems, totalPrice, updateQuantity, removeItem, clearCart } = useCart()
     const [isProcessing, setIsProcessing] = useState(false)
+    const [agreedToTerms, setAgreedToTerms] = useState(false)
+    const { toast } = useToast()
 
-    const shipping = items.length > 0 ? 10 : 0
-    const tax = totalPrice * 0.08
-    const finalTotal = totalPrice + shipping + tax
+    const tax = totalPrice * 0.18 // GST 18%
+    const finalTotal = totalPrice + tax
 
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
         email: "",
         phone: "",
-        address: "",
-        city: "",
-        state: "",
-        zipCode: "",
-        cardNumber: "",
-        cardName: "",
-        expiryDate: "",
-        cvv: "",
     })
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,14 +38,27 @@ export default function CheckoutPage() {
 
     const handlePlaceOrder = async (e: React.FormEvent) => {
         e.preventDefault()
+
+        if (!agreedToTerms) {
+            toast({
+                title: "Terms Required",
+                description: "Please agree to the Terms and Conditions to proceed.",
+                variant: "destructive",
+            })
+            return
+        }
+
         setIsProcessing(true)
 
-        // Simulate order processing
+        // Simulate payment processing
         await new Promise((resolve) => setTimeout(resolve, 2000))
 
-        // Clear cart and show success
+        // Clear cart and show success with download
         clearCart()
-        alert("Order placed successfully! Thank you for your purchase.")
+        toast({
+            title: "Order Placed Successfully!",
+            description: "Check your email for the download link.",
+        })
         router.push("/")
         setIsProcessing(false)
     }
@@ -65,13 +73,13 @@ export default function CheckoutPage() {
                             Your Cart is Empty
                         </h1>
                         <p className="text-muted-foreground mb-8">
-                            Add some items to your cart before checking out.
+                            Add some designs to your cart before checking out.
                         </p>
                         <Button
                             onClick={() => router.push("/")}
                             className="bg-primary hover:bg-primary/90 text-primary-foreground"
                         >
-                            Continue Shopping
+                            Browse Designs
                         </Button>
                     </div>
                 </div>
@@ -89,7 +97,7 @@ export default function CheckoutPage() {
                         className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors mb-4"
                     >
                         <ArrowLeft className="h-4 w-4 mr-2" />
-                        Continue Shopping
+                        Continue Browsing
                     </Link>
                     <h1 className="font-[var(--font-oswald)] text-4xl sm:text-5xl font-bold text-foreground">
                         CHECKOUT
@@ -99,6 +107,22 @@ export default function CheckoutPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Left Column - Forms */}
                     <div className="lg:col-span-2 space-y-8">
+                        {/* Digital Product Notice */}
+                        <div className="bg-primary/10 border border-primary/20 rounded-xl p-6">
+                            <div className="flex items-start gap-4">
+                                <div className="p-3 rounded-lg bg-primary/20">
+                                    <FileArchive className="h-6 w-6 text-primary" />
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold text-foreground mb-2">Digital Download</h3>
+                                    <p className="text-sm text-muted-foreground">
+                                        Your design files will be available for immediate download after payment.
+                                        Each design includes Adobe Illustrator (.ai) and CorelDraw (.cdr) files in a ZIP archive.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
                         {/* Contact Information */}
                         <div className="bg-secondary/30 rounded-xl p-6">
                             <h2 className="font-[var(--font-oswald)] text-2xl font-bold text-foreground mb-6">
@@ -133,7 +157,7 @@ export default function CheckoutPage() {
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-foreground mb-2">
-                                        Email *
+                                        Email * <span className="text-muted-foreground font-normal">(Download link will be sent here)</span>
                                     </label>
                                     <Input
                                         type="email"
@@ -156,75 +180,6 @@ export default function CheckoutPage() {
                                         required
                                         className="bg-background border-border"
                                     />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Payment Information */}
-                        <div className="bg-secondary/30 rounded-xl p-6">
-                            <div className="flex items-center gap-2 mb-6">
-                                <CreditCard className="h-5 w-5 text-primary" />
-                                <h2 className="font-[var(--font-oswald)] text-2xl font-bold text-foreground">
-                                    Payment Information
-                                </h2>
-                            </div>
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-foreground mb-2">
-                                        Card Number *
-                                    </label>
-                                    <Input
-                                        type="text"
-                                        name="cardNumber"
-                                        value={formData.cardNumber}
-                                        onChange={handleInputChange}
-                                        placeholder="1234 5678 9012 3456"
-                                        required
-                                        className="bg-background border-border"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-foreground mb-2">
-                                        Name on Card *
-                                    </label>
-                                    <Input
-                                        type="text"
-                                        name="cardName"
-                                        value={formData.cardName}
-                                        onChange={handleInputChange}
-                                        required
-                                        className="bg-background border-border"
-                                    />
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-foreground mb-2">
-                                            Expiry Date *
-                                        </label>
-                                        <Input
-                                            type="text"
-                                            name="expiryDate"
-                                            value={formData.expiryDate}
-                                            onChange={handleInputChange}
-                                            placeholder="MM/YY"
-                                            required
-                                            className="bg-background border-border"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-foreground mb-2">
-                                            CVV *
-                                        </label>
-                                        <Input
-                                            type="text"
-                                            name="cvv"
-                                            value={formData.cvv}
-                                            onChange={handleInputChange}
-                                            placeholder="123"
-                                            required
-                                            className="bg-background border-border"
-                                        />
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -254,12 +209,13 @@ export default function CheckoutPage() {
                                                 {item.name}
                                             </h3>
                                             <p className="text-xs text-muted-foreground">{item.player}</p>
+                                            <p className="text-xs text-primary mt-1">Digital Design File</p>
                                             <div className="flex items-center justify-between mt-2">
                                                 <span className="text-xs text-muted-foreground">
                                                     Qty: {item.quantity}
                                                 </span>
                                                 <span className="font-bold text-sm text-foreground">
-                                                    ${(item.price * item.quantity).toFixed(2)}
+                                                    ₹{(item.price * item.quantity).toFixed(2)}
                                                 </span>
                                             </div>
                                         </div>
@@ -274,26 +230,20 @@ export default function CheckoutPage() {
                                 <div className="flex justify-between text-sm">
                                     <span className="text-muted-foreground">Subtotal</span>
                                     <span className="text-foreground font-medium">
-                                        ${totalPrice.toFixed(2)}
+                                        ₹{totalPrice.toFixed(2)}
                                     </span>
                                 </div>
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">Shipping</span>
+                                    <span className="text-muted-foreground">GST (18%)</span>
                                     <span className="text-foreground font-medium">
-                                        ${shipping.toFixed(2)}
-                                    </span>
-                                </div>
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">Tax (8%)</span>
-                                    <span className="text-foreground font-medium">
-                                        ${tax.toFixed(2)}
+                                        ₹{tax.toFixed(2)}
                                     </span>
                                 </div>
                                 <Separator className="my-2" />
                                 <div className="flex justify-between">
                                     <span className="font-bold text-lg">Total</span>
                                     <span className="font-bold text-lg text-primary">
-                                        ${finalTotal.toFixed(2)}
+                                        ₹{finalTotal.toFixed(2)}
                                     </span>
                                 </div>
                             </div>
@@ -305,19 +255,48 @@ export default function CheckoutPage() {
                                     <span>Secure Payment</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <Truck className="h-4 w-4 text-primary" />
-                                    <span>Free Shipping over $100</span>
+                                    <Download className="h-4 w-4 text-primary" />
+                                    <span>Instant Download After Payment</span>
                                 </div>
+                                <div className="flex items-center gap-2">
+                                    <FileArchive className="h-4 w-4 text-primary" />
+                                    <span>AI + CDR Files Included</span>
+                                </div>
+                            </div>
+
+                            {/* Terms Agreement */}
+                            <div className="flex items-start gap-3 mb-6 p-3 bg-background/50 rounded-lg">
+                                <Checkbox
+                                    id="terms"
+                                    checked={agreedToTerms}
+                                    onCheckedChange={(checked) => setAgreedToTerms(checked as boolean)}
+                                    className="mt-0.5"
+                                />
+                                <label htmlFor="terms" className="text-sm text-muted-foreground cursor-pointer">
+                                    I agree to the{" "}
+                                    <Link href="/terms" className="text-primary hover:underline" target="_blank">
+                                        Terms and Conditions
+                                    </Link>{" "}
+                                    and{" "}
+                                    <Link href="/privacy-policy" className="text-primary hover:underline" target="_blank">
+                                        Privacy Policy
+                                    </Link>
+                                    . I understand that digital products are non-refundable.
+                                </label>
                             </div>
 
                             {/* Place Order Button */}
                             <Button
                                 onClick={handlePlaceOrder}
-                                disabled={isProcessing}
-                                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-base h-12"
+                                disabled={isProcessing || !agreedToTerms}
+                                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-base h-12 disabled:opacity-50"
                             >
-                                {isProcessing ? "Processing..." : "Place Order"}
+                                {isProcessing ? "Processing..." : "Complete Purchase"}
                             </Button>
+
+                            <p className="text-xs text-center text-muted-foreground mt-4">
+                                Download link will be sent to your email
+                            </p>
                         </div>
                     </div>
                 </div>

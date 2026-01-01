@@ -6,23 +6,23 @@ import { Shield, Truck, RefreshCw, Award } from "lucide-react"
 const features = [
   {
     icon: Shield,
-    title: "100% Authentic",
-    description: "Every jersey is officially licensed and verified authentic from the leagues.",
+    title: "100% Original",
+    description: "Every design is unique and crafted with attention to detail for your team.",
   },
   {
     icon: Truck,
-    title: "Fast Shipping",
-    description: "Free express shipping on orders over $99. Delivered in 2-4 business days.",
+    title: "Fast Delivery",
+    description: "Quick turnaround on all design orders. Get your designs in 2-4 business days.",
   },
   {
     icon: RefreshCw,
-    title: "Easy Returns",
-    description: "30-day hassle-free returns. Not the right fit? We've got you covered.",
+    title: "Free Revisions",
+    description: "Not satisfied? We offer free revisions until you love your design.",
   },
   {
     icon: Award,
-    title: "Premium Quality",
-    description: "Same quality worn on the court. Breathable fabric, authentic stitching.",
+    title: "Premium Designs",
+    description: "Professional-grade designs that make your team stand out on the field.",
   },
 ]
 
@@ -39,10 +39,10 @@ export function WhyChooseUs() {
           className="text-center mb-16"
         >
           <h2 className="font-[var(--font-oswald)] text-4xl sm:text-5xl font-bold text-foreground tracking-tight">
-            WHY JERSEY VAULT?
+            WHY NU jerserys?
           </h2>
           <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
-            We're not just selling jerseys — we're delivering authentic gameday experiences.
+            We're not just creating designs — we're crafting your team's identity.
           </p>
         </motion.div>
 

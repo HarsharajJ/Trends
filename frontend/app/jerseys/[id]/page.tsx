@@ -1,34 +1,74 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useParams, useRouter, notFound } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
-import { motion, AnimatePresence } from "framer-motion"
-import { Star, Minus, Plus, ShoppingBag, Heart, Share2, ChevronRight, Truck, ShieldCheck, ArrowLeft } from "lucide-react"
+import { motion } from "framer-motion"
+import { Star, Minus, Plus, ShoppingBag, Heart, ChevronRight, Truck, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { getJerseyById, getJerseysByCategory } from "@/lib/data"
+import { getJerseyById, getJerseys } from "@/lib/api"
+import { Jersey } from "@/lib/types"
 import { JerseyCard } from "@/components/jersey-card"
 import { useCart } from "@/context/cart-context"
 
 export default function JerseyPage() {
     const params = useParams()
     const router = useRouter()
-    const id = params.id
-    const jersey = getJerseyById(id as string)
+    const id = params.id as string
+
+    const [jersey, setJersey] = useState<Jersey | null>(null)
+    const [relatedJerseys, setRelatedJerseys] = useState<Jersey[]>([])
+    const [loading, setLoading] = useState(true)
+    const [notFoundState, setNotFoundState] = useState(false)
     const [quantity, setQuantity] = useState(1)
-    const [activeTab, setActiveTab] = useState("description")
     const { addItem } = useCart()
 
-    if (!jersey) {
+    useEffect(() => {
+        async function loadData() {
+            try {
+                const jerseyData = await getJerseyById(parseInt(id))
+                setJersey(jerseyData)
+
+                // Fetch related jerseys from same category
+                const relatedData = await getJerseys({ categoryId: jerseyData.categoryId, limit: 5 })
+                setRelatedJerseys(relatedData.data.filter((j) => j.id !== jerseyData.id).slice(0, 4))
+            } catch (error) {
+                console.error("Failed to load jersey:", error)
+                setNotFoundState(true)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        loadData()
+    }, [id])
+
+    if (notFoundState) {
         notFound()
     }
 
-    const relatedJerseys = getJerseysByCategory(jersey.category)
-        .filter((j) => j.id !== jersey.id)
-        .slice(0, 4)
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-background pt-24 pb-12">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 animate-pulse">
+                        <div className="aspect-square bg-secondary/50 rounded-2xl" />
+                        <div className="space-y-6">
+                            <div className="h-12 bg-secondary/50 rounded w-3/4" />
+                            <div className="h-6 bg-secondary/50 rounded w-1/2" />
+                            <div className="h-8 bg-secondary/50 rounded w-1/4" />
+                            <div className="h-32 bg-secondary/50 rounded" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    if (!jersey) return null
 
     const handleQuantityChange = (type: "increment" | "decrement") => {
         if (type === "decrement" && quantity > 1) {
@@ -44,13 +84,15 @@ export default function JerseyPage() {
                 id: jersey.id,
                 name: jersey.name,
                 player: jersey.player,
-                price: jersey.price,
+                price: Number(jersey.price),
                 image: jersey.image,
             })
         }
-        // Reset quantity after adding
         setQuantity(1)
     }
+
+    const price = Number(jersey.price)
+    const originalPrice = jersey.originalPrice ? Number(jersey.originalPrice) : null
 
     return (
         <div className="min-h-screen bg-background pt-24 pb-12">
@@ -62,7 +104,7 @@ export default function JerseyPage() {
                     <ChevronRight className="h-4 w-4 mx-2" />
                     <Link href="/categories" className="hover:text-primary transition-colors">Categories</Link>
                     <ChevronRight className="h-4 w-4 mx-2" />
-                    <Link href={`/categories/${jersey.category}`} className="hover:text-primary transition-colors uppercase">{jersey.category}</Link>
+                    <Link href={`/categories/${jersey.categoryId}`} className="hover:text-primary transition-colors uppercase">{jersey.categoryId}</Link>
                     <ChevronRight className="h-4 w-4 mx-2" />
                     <span className="text-foreground font-medium truncate">{jersey.name}</span>
                 </nav>
@@ -113,22 +155,22 @@ export default function JerseyPage() {
                                 ))}
                             </div>
                             <span className="text-sm text-muted-foreground">
-                                {jersey.rating} ({jersey.reviews} reviews)
+                                {jersey.rating} ({jersey.reviewCount} reviews)
                             </span>
                         </div>
 
                         <div className="flex items-center gap-4 mb-8">
                             <span className="text-3xl font-bold text-foreground">
-                                ${jersey.price}
+                                ₹{price}
                             </span>
-                            {jersey.originalPrice && (
+                            {originalPrice && (
                                 <span className="text-xl text-muted-foreground line-through">
-                                    ${jersey.originalPrice}
+                                    ₹{originalPrice}
                                 </span>
                             )}
-                            {jersey.originalPrice && (
+                            {originalPrice && (
                                 <Badge variant="destructive">
-                                    Save ${jersey.originalPrice - jersey.price}
+                                    Save ₹{originalPrice - price}
                                 </Badge>
                             )}
                         </div>
@@ -180,7 +222,7 @@ export default function JerseyPage() {
                         <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground mb-8">
                             <div className="flex items-center gap-2">
                                 <Truck className="h-4 w-4" />
-                                <span>Free Shipping over $100</span>
+                                <span>Instant Digital Download</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <ShieldCheck className="h-4 w-4" />
@@ -195,7 +237,7 @@ export default function JerseyPage() {
                             </div>
                             <div className="flex gap-2 text-sm text-muted-foreground mt-1">
                                 <span className="font-medium text-foreground">Category:</span>
-                                <span className="capitalize">{jersey.category}</span>
+                                <span className="capitalize">{jersey.categoryId}</span>
                             </div>
                         </div>
                     </motion.div>
@@ -221,7 +263,7 @@ export default function JerseyPage() {
                                 value="reviews"
                                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-2"
                             >
-                                Reviews ({jersey.reviews})
+                                Reviews ({jersey.reviewCount})
                             </TabsTrigger>
                         </TabsList>
                         <TabsContent value="description" className="animate-in fade-in-50 duration-500">
@@ -276,7 +318,20 @@ export default function JerseyPage() {
                         <h2 className="font-[var(--font-oswald)] text-3xl font-bold mb-8">RELATED PRODUCTS</h2>
                         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
                             {relatedJerseys.map((relatedJersey, index) => (
-                                <JerseyCard key={relatedJersey.id} {...relatedJersey} index={index} />
+                                <JerseyCard
+                                    key={relatedJersey.id}
+                                    id={relatedJersey.id}
+                                    name={relatedJersey.name}
+                                    player={relatedJersey.player}
+                                    price={Number(relatedJersey.price)}
+                                    originalPrice={relatedJersey.originalPrice ? Number(relatedJersey.originalPrice) : null}
+                                    rating={relatedJersey.rating}
+                                    reviews={relatedJersey.reviewCount}
+                                    image={relatedJersey.image}
+                                    badge={relatedJersey.badge}
+                                    badgeColor={relatedJersey.badgeColor}
+                                    index={index}
+                                />
                             ))}
                         </div>
                     </div>
@@ -286,3 +341,4 @@ export default function JerseyPage() {
         </div>
     )
 }
+

@@ -1,0 +1,88 @@
+// TypeScript types matching backend API responses
+
+export interface Category {
+    id: string
+    name: string
+    image: string
+    description: string
+    _count?: {
+        jerseys: number
+    }
+}
+
+export interface CategoryWithJerseys extends Category {
+    jerseys: Jersey[]
+}
+
+export interface Jersey {
+    id: number
+    name: string
+    player: string
+    price: number
+    originalPrice: number | null
+    rating: number
+    reviewCount: number
+    image: string
+    downloadUrl: string
+    badge: string | null
+    badgeColor: string | null
+    categoryId: string
+    category?: Category
+    createdAt: string
+    updatedAt: string
+}
+
+export interface Pagination {
+    page: number
+    limit: number
+    total: number
+    totalPages: number
+}
+
+export interface ApiResponse<T> {
+    success: boolean
+    data: T
+    message?: string
+}
+
+export interface JerseysResponse {
+    success: boolean
+    data: Jersey[]
+    pagination: Pagination
+}
+
+export interface CartItemData {
+    id: number
+    name: string
+    player: string
+    price: number
+    image: string
+    quantity: number
+}
+
+export interface OrderItem {
+    jerseyId: number
+    quantity: number
+    price: number
+}
+
+export interface CreateOrderRequest {
+    items: OrderItem[]
+    customerInfo: {
+        firstName: string
+        lastName: string
+        email: string
+        phone: string
+    }
+}
+
+export interface Order {
+    id: string
+    userId: string
+    status: "PENDING" | "PAID" | "CANCELLED"
+    subtotal: number
+    tax: number
+    total: number
+    items: OrderItem[]
+    createdAt: string
+}

@@ -1,39 +1,40 @@
-// Shared data for categories and jerseys
+// Shared data for categories and jersey designs
 
 export const categories = [
     {
         id: "cricket",
         name: "Cricket",
         image: "/nba-basketball-jersey-lakers-yellow-dark-dramatic.png",
-        count: "120+ Jerseys",
+        count: "120+ Designs",
         color: "from-yellow-500/20",
-        description: "Premium cricket jerseys from international teams",
+        description: "Premium cricket jersey designs for teams",
     },
     {
         id: "football",
         name: "Football",
         image: "/nfl-football-jersey-patriots-blue-dark-dramatic.png",
-        count: "95+ Jerseys",
+        count: "95+ Designs",
         color: "from-blue-500/20",
-        description: "Top football jerseys from elite clubs worldwide",
+        description: "Top football jersey designs for clubs worldwide",
     },
     {
         id: "basketball",
         name: "Basketball",
         image: "/soccer-football-jersey-barcelona-red-blue-dark-dra.png",
-        count: "150+ Jerseys",
+        count: "150+ Designs",
         color: "from-red-500/20",
-        description: "Official basketball jerseys for every fan",
+        description: "Professional basketball jersey designs",
     },
     {
         id: "volleyball",
         name: "Volleyball",
         image: "/mlb-baseball-jersey-yankees-pinstripe-dark-dramati.png",
-        count: "80+ Jerseys",
+        count: "80+ Designs",
         color: "from-slate-500/20",
-        description: "Professional volleyball jerseys and apparel",
+        description: "Premium volleyball jersey designs",
     },
 ]
+
 
 export const allJerseys = [
     {
@@ -47,7 +48,7 @@ export const allJerseys = [
         image: "/lakers-purple-gold-basketball-jersey-lebron-james-.png",
         badge: "Best Seller",
         badgeColor: "bg-primary",
-        category: "nba",
+        category: "basketball",
     },
     {
         id: 2,
@@ -60,7 +61,7 @@ export const allJerseys = [
         image: "/warriors-blue-gold-basketball-jersey-stephen-curry.png",
         badge: "New",
         badgeColor: "bg-accent text-accent-foreground",
-        category: "nba",
+        category: "basketball",
     },
     {
         id: 3,
@@ -73,7 +74,7 @@ export const allJerseys = [
         image: "/celtics-green-white-basketball-jersey-jayson-tatum.png",
         badge: "Sale",
         badgeColor: "bg-destructive",
-        category: "nba",
+        category: "basketball",
     },
     {
         id: 4,
@@ -86,7 +87,7 @@ export const allJerseys = [
         image: "/bulls-red-black-basketball-jersey-derozan-dark-bac.png",
         badge: null,
         badgeColor: null,
-        category: "nba",
+        category: "basketball",
     },
     {
         id: 5,
@@ -99,7 +100,7 @@ export const allJerseys = [
         image: "/nets-black-white-basketball-jersey-kevin-durant-da.png",
         badge: "Limited",
         badgeColor: "bg-secondary text-secondary-foreground",
-        category: "nba",
+        category: "basketball",
     },
     {
         id: 6,
@@ -112,7 +113,7 @@ export const allJerseys = [
         image: "/suns-orange-purple-basketball-jersey-kevin-durant-.png",
         badge: null,
         badgeColor: null,
-        category: "nba",
+        category: "basketball",
     },
     {
         id: 7,
@@ -125,7 +126,7 @@ export const allJerseys = [
         image: "/nfl-football-jersey-patriots-blue-dark-dramatic.png",
         badge: "Sale",
         badgeColor: "bg-destructive",
-        category: "nfl",
+        category: "football",
     },
     {
         id: 8,
@@ -138,7 +139,7 @@ export const allJerseys = [
         image: "/soccer-football-jersey-barcelona-red-blue-dark-dra.png",
         badge: "Popular",
         badgeColor: "bg-primary",
-        category: "soccer",
+        category: "football",
     },
     {
         id: 9,
@@ -151,7 +152,7 @@ export const allJerseys = [
         image: "/mlb-baseball-jersey-yankees-pinstripe-dark-dramati.png",
         badge: "Classic",
         badgeColor: "bg-secondary text-secondary-foreground",
-        category: "mlb",
+        category: "cricket",
     },
 ]
 

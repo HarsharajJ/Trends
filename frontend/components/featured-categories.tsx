@@ -1,12 +1,32 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 import { CategoryCard } from "@/components/category-card"
-import { categories } from "@/lib/data"
+import { getCategories } from "@/lib/api"
+import { Category } from "@/lib/types"
+
+// Fallback colors for categories
+const categoryColors: Record<string, string> = {
+  cricket: "from-yellow-500/20",
+  football: "from-blue-500/20",
+  basketball: "from-red-500/20",
+  volleyball: "from-slate-500/20",
+}
 
 export function FeaturedCategories() {
+  const [categories, setCategories] = useState<Category[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getCategories()
+      .then(setCategories)
+      .catch(console.error)
+      .finally(() => setLoading(false))
+  }, [])
+
   return (
     <section className="py-24 px-4 sm:px-6 lg:px-8 bg-background">
       <div className="max-w-7xl mx-auto">
@@ -35,15 +55,28 @@ export function FeaturedCategories() {
 
         {/* Categories Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          {categories.map((category, index) => (
-            <CategoryCard
-              key={category.id}
-              {...category}
-              index={index}
-            />
-          ))}
+          {loading ? (
+            // Loading skeleton
+            Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="aspect-[3/4] bg-secondary/50 rounded-2xl animate-pulse" />
+            ))
+          ) : (
+            categories.map((category, index) => (
+              <CategoryCard
+                key={category.id}
+                id={category.id}
+                name={category.name}
+                image={category.image}
+                description={category.description}
+                count={`${category._count?.jerseys || 0}+ Designs`}
+                color={categoryColors[category.id] || "from-gray-500/20"}
+                index={index}
+              />
+            ))
+          )}
         </div>
       </div>
     </section>
   )
 }
+
