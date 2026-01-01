@@ -69,7 +69,7 @@ export const processPayment = asyncHandler(async (req: Request, res: Response) =
         data: {
             payment,
             order: paidOrder,
-            downloadLinks: paidOrder?.items.map((item) => ({
+            downloadLinks: paidOrder?.items.map((item: NonNullable<typeof paidOrder>["items"][number]) => ({
                 jerseyId: item.jersey.id,
                 name: item.jersey.name,
                 downloadUrl: item.jersey.downloadUrl,

@@ -30,7 +30,7 @@ export const getCart = asyncHandler(async (req: Request, res: Response) => {
 
     // Calculate totals
     const subtotal = cart.items.reduce(
-        (sum, item) => sum + Number(item.jersey.price) * item.quantity,
+        (sum: number, item: (typeof cart.items)[number]) => sum + Number(item.jersey.price) * item.quantity,
         0
     );
 
@@ -39,7 +39,7 @@ export const getCart = asyncHandler(async (req: Request, res: Response) => {
         data: {
             ...cart,
             subtotal,
-            itemCount: cart.items.reduce((sum, item) => sum + item.quantity, 0),
+            itemCount: cart.items.reduce((sum: number, item: (typeof cart.items)[number]) => sum + item.quantity, 0),
         },
     });
 });

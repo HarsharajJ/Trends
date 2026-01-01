@@ -38,7 +38,7 @@ export const createOrder = asyncHandler(async (req: Request, res: Response) => {
 
     // Calculate totals
     const subtotal = cart.items.reduce(
-        (sum, item) => sum + Number(item.jersey.price) * item.quantity,
+        (sum: number, item: (typeof cart.items)[number]) => sum + Number(item.jersey.price) * item.quantity,
         0
     );
     const tax = subtotal * 0.08; // 8% tax
@@ -53,7 +53,7 @@ export const createOrder = asyncHandler(async (req: Request, res: Response) => {
             tax,
             total,
             items: {
-                create: cart.items.map((item) => ({
+                create: cart.items.map((item: (typeof cart.items)[number]) => ({
                     jerseyId: item.jerseyId,
                     quantity: item.quantity,
                     price: item.jersey.price,
@@ -112,7 +112,7 @@ export const getOrderById = asyncHandler(async (req: Request, res: Response) => 
     // Hide download URLs if not paid
     const responseData = {
         ...order,
-        items: order.items.map((item) => ({
+        items: order.items.map((item: (typeof order.items)[number]) => ({
             ...item,
             jersey: {
                 ...item.jersey,
