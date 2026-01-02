@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Shield, Truck, RefreshCw, Award } from "lucide-react"
+import { Shield, Download, RefreshCw, Award } from "lucide-react"
 
 const features = [
   {
@@ -10,9 +10,9 @@ const features = [
     description: "Every design is unique and crafted with attention to detail for your team.",
   },
   {
-    icon: Truck,
-    title: "Fast Delivery",
-    description: "Quick turnaround on all design orders. Get your designs in 2-4 business days.",
+    icon: Download,
+    title: "Instant Digital Delivery",
+    description: "Get your designs instantly via digital download. No waiting, no shipping delays.",
   },
   {
     icon: RefreshCw,

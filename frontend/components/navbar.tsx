@@ -37,7 +37,7 @@ export function SiteNavbar() {
             NU
           </span>
           <span className="font-[var(--font-oswald)] text-2xl font-bold tracking-tight text-primary">
-            PRINTS
+            JERSEYS
           </span>
         </Link>
 
@@ -46,12 +46,8 @@ export function SiteNavbar() {
 
         {/* Right Actions */}
         <div className="relative z-20 flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="text-foreground">
-            <Search className="h-5 w-5" />
-          </Button>
-          <Button variant="ghost" size="icon" className="text-foreground">
-            <User className="h-5 w-5" />
-          </Button>
+          
+          
           <CartSheet />
           <NavbarButton variant="gradient" className="hidden sm:inline-block">
             Shop Now

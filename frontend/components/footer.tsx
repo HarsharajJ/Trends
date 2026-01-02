@@ -14,10 +14,9 @@ const footerLinks = {
   ],
   support: [
     { name: "Contact Us", href: "#" },
-    { name: "Shipping Info", href: "#" },
+  
     { name: "Returns", href: "#" },
     { name: "Size Guide", href: "#" },
-    { name: "Track Order", href: "#" },
     { name: "FAQ", href: "#" },
   ],
   company: [
@@ -32,7 +31,7 @@ const footerLinks = {
 const socialLinks = [
   { icon: Instagram, href: "#", label: "Instagram" },
   { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Youtube, href: "#", label: "YouTube" },
+
   { icon: Facebook, href: "#", label: "Facebook" },
 ]
 

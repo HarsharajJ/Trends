@@ -100,7 +100,7 @@ export function TrendingJerseys() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="flex justify-center mt-12"
         >
-          <Link href="/categories">
+          <Link href="/jerseys">
             <Button
               variant="outline"
               size="lg"

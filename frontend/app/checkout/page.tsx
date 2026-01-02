@@ -23,27 +23,57 @@ export default function CheckoutPage() {
     const finalTotal = totalPrice + tax
 
     const [formData, setFormData] = useState({
-        firstName: "",
-        lastName: "",
+        companyName: "",
         email: "",
         phone: "",
     })
 
+    const [errors, setErrors] = useState({
+        companyName: false,
+        email: false,
+        phone: false,
+    })
+
+    const isFormValid = formData.companyName.trim() !== "" &&
+        formData.email.trim() !== "" &&
+        formData.phone.trim() !== ""
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value,
+            [name]: value,
         })
+        // Clear error when user starts typing
+        if (value.trim() !== "") {
+            setErrors(prev => ({ ...prev, [name]: false }))
+        }
     }
 
     const handlePlaceOrder = async (e: React.FormEvent) => {
         e.preventDefault()
 
+        // Validate form and show errors
+        const newErrors = {
+            companyName: formData.companyName.trim() === "",
+            email: formData.email.trim() === "",
+            phone: formData.phone.trim() === "",
+        }
+        setErrors(newErrors)
+
+        // Check if there are any errors
+        if (newErrors.companyName || newErrors.email || newErrors.phone) {
+            toast({
+                title: "Required Fields Missing",
+                description: "Please fill in all required fields.",
+            })
+            return
+        }
+
         if (!agreedToTerms) {
             toast({
                 title: "Terms Required",
                 description: "Please agree to the Terms and Conditions to proceed.",
-                variant: "destructive",
             })
             return
         }
@@ -128,32 +158,23 @@ export default function CheckoutPage() {
                             <h2 className="font-[var(--font-oswald)] text-2xl font-bold text-foreground mb-6">
                                 Contact Information
                             </h2>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-4">
                                 <div>
                                     <label className="block text-sm font-medium text-foreground mb-2">
-                                        First Name *
+                                        Company Name *
                                     </label>
                                     <Input
                                         type="text"
-                                        name="firstName"
-                                        value={formData.firstName}
+                                        name="companyName"
+                                        value={formData.companyName}
                                         onChange={handleInputChange}
+                                        placeholder="Enter your company name"
                                         required
-                                        className="bg-background border-border"
+                                        className={`bg-background ${errors.companyName ? "border-red-500 ring-1 ring-red-500" : "border-border"}`}
                                     />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-foreground mb-2">
-                                        Last Name *
-                                    </label>
-                                    <Input
-                                        type="text"
-                                        name="lastName"
-                                        value={formData.lastName}
-                                        onChange={handleInputChange}
-                                        required
-                                        className="bg-background border-border"
-                                    />
+                                    {errors.companyName && (
+                                        <p className="text-red-500 text-xs mt-1">Company name is required</p>
+                                    )}
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-foreground mb-2">
@@ -164,9 +185,13 @@ export default function CheckoutPage() {
                                         name="email"
                                         value={formData.email}
                                         onChange={handleInputChange}
+                                        placeholder="Enter your email address"
                                         required
-                                        className="bg-background border-border"
+                                        className={`bg-background ${errors.email ? "border-red-500 ring-1 ring-red-500" : "border-border"}`}
                                     />
+                                    {errors.email && (
+                                        <p className="text-red-500 text-xs mt-1">Email is required</p>
+                                    )}
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-foreground mb-2">
@@ -177,9 +202,13 @@ export default function CheckoutPage() {
                                         name="phone"
                                         value={formData.phone}
                                         onChange={handleInputChange}
+                                        placeholder="Enter your phone number"
                                         required
-                                        className="bg-background border-border"
+                                        className={`bg-background ${errors.phone ? "border-red-500 ring-1 ring-red-500" : "border-border"}`}
                                     />
+                                    {errors.phone && (
+                                        <p className="text-red-500 text-xs mt-1">Phone number is required</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
