@@ -3,12 +3,16 @@ import { prisma } from "../utils/prisma";
 import { asyncHandler } from "../utils/asyncHandler";
 import { createError } from "../middleware/errorHandler";
 
-// Create order from cart
+// Create order from cart items
 export const createOrder = asyncHandler(async (req: Request, res: Response) => {
-    const { companyName, email, phone } = req.body;
+    const { companyName, email, phone, items } = req.body;
 
     if (!companyName || !email || !phone) {
         throw createError("Company name, email, and phone are required", 400);
+    }
+
+    if (!items || !Array.isArray(items) || items.length === 0) {
+        throw createError("Cart items are required", 400);
     }
 
     // Find or create user
@@ -20,28 +24,40 @@ export const createOrder = asyncHandler(async (req: Request, res: Response) => {
         user = await prisma.user.create({
             data: { companyName, email, phone, role: "USER" },
         });
+    } else {
+        // Update user info if they exist
+        user = await prisma.user.update({
+            where: { email },
+            data: { companyName, phone },
+        });
     }
 
-    // Get user's cart
-    const cart = await prisma.cart.findUnique({
-        where: { userId: user.id },
-        include: {
-            items: {
-                include: { jersey: true },
-            },
-        },
+    // Validate items and get jersey details
+    const jerseyIds = items.map((item: { jerseyId: number }) => item.jerseyId);
+    const jerseys = await prisma.jersey.findMany({
+        where: { id: { in: jerseyIds } },
     });
 
-    if (!cart || cart.items.length === 0) {
-        throw createError("Cart is empty", 400);
+    if (jerseys.length !== jerseyIds.length) {
+        throw createError("One or more jerseys not found", 400);
     }
 
+    // Create a map for easy lookup
+    const jerseyMap = new Map(jerseys.map(j => [j.id, j]));
+
     // Calculate totals
-    const subtotal = cart.items.reduce(
-        (sum: number, item: (typeof cart.items)[number]) => sum + Number(item.jersey.price) * item.quantity,
-        0
-    );
-    const tax = subtotal * 0.08; // 8% tax
+    let subtotal = 0;
+    const orderItems = items.map((item: { jerseyId: number; quantity: number }) => {
+        const jersey = jerseyMap.get(item.jerseyId)!;
+        subtotal += Number(jersey.price) * item.quantity;
+        return {
+            jerseyId: item.jerseyId,
+            quantity: item.quantity,
+            price: jersey.price,
+        };
+    });
+
+    const tax = subtotal * 0.18; // 18% GST
     const total = subtotal + tax;
 
     // Create order with items
@@ -53,11 +69,7 @@ export const createOrder = asyncHandler(async (req: Request, res: Response) => {
             tax,
             total,
             items: {
-                create: cart.items.map((item: (typeof cart.items)[number]) => ({
-                    jerseyId: item.jerseyId,
-                    quantity: item.quantity,
-                    price: item.jersey.price,
-                })),
+                create: orderItems,
             },
         },
         include: {
@@ -68,17 +80,13 @@ export const createOrder = asyncHandler(async (req: Request, res: Response) => {
         },
     });
 
-    // Clear cart after order creation
-    await prisma.cartItem.deleteMany({
-        where: { cartId: cart.id },
-    });
-
     res.status(201).json({
         success: true,
         data: order,
         message: "Order created successfully",
     });
 });
+
 
 // Get order by ID (with download links if paid)
 export const getOrderById = asyncHandler(async (req: Request, res: Response) => {

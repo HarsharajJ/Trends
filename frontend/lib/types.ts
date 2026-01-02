@@ -67,13 +67,13 @@ export interface OrderItem {
 }
 
 export interface CreateOrderRequest {
-    items: OrderItem[]
-    customerInfo: {
-        firstName: string
-        lastName: string
-        email: string
-        phone: string
-    }
+    companyName: string
+    email: string
+    phone: string
+    items: {
+        jerseyId: number
+        quantity: number
+    }[]
 }
 
 export interface Order {

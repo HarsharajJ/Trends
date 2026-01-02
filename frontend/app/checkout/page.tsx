@@ -11,6 +11,7 @@ import { useCart } from "@/context/cart-context"
 import { Separator } from "@/components/ui/separator"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useToast } from "@/components/ui/use-toast"
+import { createOrder } from "@/lib/api"
 
 export default function CheckoutPage() {
     const router = useRouter()
@@ -80,17 +81,35 @@ export default function CheckoutPage() {
 
         setIsProcessing(true)
 
-        // Simulate payment processing
-        await new Promise((resolve) => setTimeout(resolve, 2000))
+        try {
+            // Create order via API
+            const order = await createOrder({
+                companyName: formData.companyName,
+                email: formData.email,
+                phone: formData.phone,
+                items: items.map(item => ({
+                    jerseyId: item.id,
+                    quantity: item.quantity,
+                })),
+            })
 
-        // Clear cart and show success with download
-        clearCart()
-        toast({
-            title: "Order Placed Successfully!",
-            description: "Check your email for the download link.",
-        })
-        router.push("/")
-        setIsProcessing(false)
+            // Clear cart and show success
+            clearCart()
+            toast({
+                title: "Order Placed Successfully!",
+                description: "Check your email for the download link.",
+            })
+
+            // Redirect to order confirmation page (or home for now)
+            router.push(`/order/${order.id}`)
+        } catch (error: any) {
+            toast({
+                title: "Order Failed",
+                description: error.message || "Something went wrong. Please try again.",
+            })
+        } finally {
+            setIsProcessing(false)
+        }
     }
 
     // Redirect if cart is empty
