@@ -32,7 +32,7 @@ export function HeroSection() {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20"
             >
               <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-              <span className="text-sm font-medium text-primary">2025 Design Collection</span>
+              <span className="text-sm font-medium text-primary">2026 Design Collection</span>
             </motion.div>
 
             <motion.h1
@@ -130,7 +130,7 @@ export function HeroSection() {
                 className="absolute top-10 -right-4 bg-card border border-border rounded-lg p-4 shadow-xl"
               >
                 <div className="text-xs text-muted-foreground uppercase tracking-wider">Limited Edition</div>
-                <div className="font-[var(--font-oswald)] text-lg font-bold text-foreground">2025 All-Star</div>
+                <div className="font-[var(--font-oswald)] text-lg font-bold text-foreground">2026 All-Star</div>
               </motion.div>
 
               {/* Price Tag */}

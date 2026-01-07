@@ -118,7 +118,7 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground">© 2025 NU jerserys. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">© 2026 NU jerserys. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <Link href="/privacy-policy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Privacy Policy

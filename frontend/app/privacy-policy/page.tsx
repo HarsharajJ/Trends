@@ -17,7 +17,7 @@ export default function PrivacyPolicyPage() {
                         Privacy Policy
                     </h1>
                     <p className="text-muted-foreground">
-                        Last updated: January 1, 2025
+                        Last updated: January 1, 2026
                     </p>
                 </motion.div>
 
